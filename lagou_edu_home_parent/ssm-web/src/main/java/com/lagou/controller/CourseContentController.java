@@ -17,39 +17,41 @@ import java.util.List;
 public class CourseContentController {
     @Autowired
     private CourseContentService courseContentService;
+
     @RequestMapping("/findSectionAndLesson")
-    public ResponseResult findSectionAndLessonByCourseId(Integer courseId){
+    public ResponseResult findSectionAndLessonByCourseId(Integer courseId) {
         List<CourseSection> list = courseContentService.findSectionAndLessonByCourseId(courseId);
         ResponseResult responseResult = new ResponseResult(true, 200, "章节及课时内容查询成功", list);
         return responseResult;
     }
 
     @RequestMapping("/findCourseByCourseId")
-    public ResponseResult findCourseByCourseId(Integer courseId){
+    public ResponseResult findCourseByCourseId(Integer courseId) {
         Course course = courseContentService.findCourseByCourseId(courseId);
         ResponseResult responseResult = new ResponseResult(true, 200, "回显章节对应的课程信息成功", course);
         return responseResult;
     }
-/*
-新增以及更新章节信息
- */
+
+    /*
+    新增以及更新章节信息
+     */
     @RequestMapping("/saveOrUpdateSection")
-    public ResponseResult saveOrUpdateSection(@RequestBody CourseSection courseSection){
+    public ResponseResult saveOrUpdateSection(@RequestBody CourseSection courseSection) {
         //判断是否携带了章节ID
-        if(courseSection.getId()==null){
+        if (courseSection.getId() == null) {
             courseContentService.saveSection(courseSection);
-            return new ResponseResult(true,200,"新增章节成功",null);
-        }else{
+            return new ResponseResult(true, 200, "新增章节成功", null);
+        } else {
             courseContentService.updateSection(courseSection);
-            return new ResponseResult(true,200,"更新章节成功",null);
+            return new ResponseResult(true, 200, "更新章节成功", null);
         }
     }
 
     @RequestMapping("/updateSectionStatus")
-    public ResponseResult updateSectionStatus(Integer id,Integer status){
-        courseContentService.updateSectionStatus(id,status);
+    public ResponseResult updateSectionStatus(Integer id, Integer status) {
+        courseContentService.updateSectionStatus(id, status);
         HashMap<String, Object> map = new HashMap<>();
-        map.put("status",status);
+        map.put("status", status);
         ResponseResult responseResult = new ResponseResult(true, 200, "修改章节状态成功", map);
         return responseResult;
     }

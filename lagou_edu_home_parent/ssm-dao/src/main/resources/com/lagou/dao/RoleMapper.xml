@@ -27,4 +27,37 @@ INNER JOIN menu m ON m.id=rm.menu_id WHERE r.id=#{id}
     <delete id="deleteRole" parameterType="int">
         delete from roles where id=#{roleId}
     </delete>
+<!--    - 方法1: 查询当前角色拥有的资源分类信息-->
+    <select id="findResourceCategoryByRoleId" parameterType="int" resultType="com.lagou.domain.ResourceCategory">
+SELECT
+  DISTINCT rsc.*
+FROM
+  roles r
+  JOIN role_resource_relation rrr
+    ON r.id = rrr.role_id
+  JOIN resource rc
+    ON rc.id = rrr.resource_id
+JOIN resource_category rsc ON
+rc.category_id=rsc.id WHERE r.id=#{id}
+    </select>
+<!--    - 方法2: 查询当前角色拥有的资源信息-->
+    <select id="findResourceByRoleId" parameterType="int" resultType="com.lagou.domain.Resource">
+        SELECT
+  rc.*
+FROM
+  roles r
+  JOIN role_resource_relation rrr
+    ON r.id = rrr.role_id
+  JOIN resource rc
+    ON rc.id = rrr.resource_id
+WHERE r.id = #{id}
+    </select>
+<!--    根据角色ID 删除角色与资源的关联关系(操作中中间表 role_resource_relation)-->
+    <delete id="deleteRoleResourceRelation" parameterType="int">
+        delete from role_resource_relation where role_id=#{roleId}
+    </delete>
+    <!--    为角色分配资源, 删除完成后 ,插入最新的关联关系-->
+    <insert id="saveRoleResourceRelation" parameterType="com.lagou.domain.RoleResourceRelation">
+        insert into role_resource_relation values(null,#{resourceId},#{roleId},#{createdTime},#{updatedTime},#{createdBy},#{updatedBy})
+    </insert>
 </mapper>

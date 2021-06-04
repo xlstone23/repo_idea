@@ -5,4 +5,21 @@
     <select id="findAllResourceCategory" resultType="com.lagou.domain.ResourceCategory">
         select * from resource_category
     </select>
+    <!--    添加资源分类-->
+    <insert id="saveResourceCategory" parameterType="com.lagou.domain.ResourceCategory">
+        insert into resource_category values(null,#{name},#{sort},#{createdTime},#{updatedTime},#{createdBy},#{updatedBy})
+    </insert>
+    <!--    回显资源分类-->
+    <select id="findResourceCategoryById" parameterType="int" resultType="com.lagou.domain.ResourceCategory">
+        select * from resource_category where id=#{reCaId}
+    </select>
+    <!--    修改资源分类-->
+    <update id="updateResourceCategory" parameterType="com.lagou.domain.ResourceCategory">
+        update resource_category set name=#{name},sort=#{sort},updated_time=#{updatedTime},updated_by=#{updatedBy} where id=#{id}
+    </update>
+    <!--    删除资源分类-->
+    <delete id="deleteResourceCategory" parameterType="com.lagou.domain.ResourceCategory">
+        delete from resource_category where id=#{id}
+    </delete>
+
 </mapper>
